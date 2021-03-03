@@ -68,8 +68,28 @@
 ```docker conatiner stats --no-stream```を用いる。
 出したい情報を制限する場合には、```--format```オプションを用いる。
 ```docker conatier ls --format='tabale {{.ID}}\t{{.Names}}\t{{.Ports}}'```<br>
+```docker stop <コンテナ名>```でストップしたコンテナは```docker start <コンテナ名>```で再起動することができる。しかし、この場合、コンテナ上で書き込まれたデータなどは停止前の状態を引き継ぐので注意。
+```docker container restart <コンテナ名>```コンテナを再起動できる。この場合も、停止前の状態を引き継ぐ。
+コンテナの本質は使い捨てができることなので、これらのcommandの使用はあまり推奨されていない。 <br>
+停止して、状態を保持する必要があるなら、ボリューム機能などを用いて、データ永続化を行うのがよい。
+コンテナの破棄は```docker conatiner rm <コンテナ名>```
+起動していないコンテナを全て削除する場合には```docker container prune```を用いる。```-f```を用いると消去の際の確認がなくなる。
 
 
 ### docker helpについて
 ```docker container help```でcontainerカテゴリーのhelpを見ることができる。
 ```docker contaier run --help```で```docker contaier run```のhelpを見ることができる。
+
+
+## Dockerでしちゃだめなこと
+#### 環境依存のイメージを作ること。
+#### イメージはDockerfileを用いて作り、イメージの作成時点でのソースコードもきちんと残す。
+#### docker composeなどを用いて、巨大なアプリは複数のイメージ、コンテナに分散指せる。アプリをマイクロサービス化して、保守点検しやすくするのが大事
+
+
+
+## Dockerイメージを使いこなす
+たとえば、
+```docker search python```とすると、Docker Hub上に上がっているレポジトリの検索ができる。discriptionを全て表示する場合には```docker search python --no-trunc```を用いる<br>
+```docker search "is-official=true -f "stars=50" python```
+とかで、細かい指定ができる。
