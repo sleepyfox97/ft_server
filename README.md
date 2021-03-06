@@ -93,3 +93,22 @@
 ```docker search python```とすると、Docker Hub上に上がっているレポジトリの検索ができる。discriptionを全て表示する場合には```docker search python --no-trunc```を用いる<br>
 ```docker search "is-official=true -f "stars=50" python```
 とかで、細かい指定ができる。
+
+
+
+## Docker file書き方
+```docker run -it debian:buster /bin/bash```
+で```debian:buster```を土台とした、コンテナが作れる。このコンテナの中で色々操作したいから```/bin/bash```を入れてる。
+最初の```docker run```commandを打った段階で、コンテナの中に入れるので（```-it```commandのおかげ）その中でapt getしたりして、必要なファイルを増やしていくのが、課題を進める大まかな流れになる。
+
+```apt install nginx```でnginxがコンテナの中にinstallできる。
+この状況で、```http://127.0.0.1:80/```にアクセスすると、"Welcome to nginx!"の表示を見ることができ、実際にnginxが堂さしていることを確認できる。
+
+```apt-get install wget```を用いて```wget```commandを使えるようにしないといけない。
+
+wordpressのためには、mySQLが必要、mySQLのためには、phpMyAdmin(mySQLの操作がwebブラウザ上から可能となる)が必要、そのためには、Nginxが必要みたいな関係性が存在するみたい。
+
+まずこのサイトから```http://repo.mysql.com/```debian:busterの上で動くmysqlを取ってくることを考えた。
+
+
+## そもそもnginxとは何か?
