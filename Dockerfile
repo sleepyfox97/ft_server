@@ -2,8 +2,13 @@ FROM debian:buster
 
 MAINTAINER sleepyfox
 
-RUN apt-get update && apt-get install -y -q nginx
-
-COPY index.html /usr/share/nginx/html/
-
-CMD ["nginx","-g","deamon off;"]
+RUN set -ex; \
+	apt-get update; \
+	apt-get install -y nginx \
+	curl \
+	wget \
+	vim \
+	openssl\
+	mariadb-server \
+	mariadb-client \
+	php-fpm \

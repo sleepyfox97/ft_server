@@ -22,6 +22,8 @@
 ```docker container run --name mynginx -d -p 8081:80 ngix:1.9.15-alpine```<br>
 ```-d```でコンテナをデーモンとして起動できる（バックグラウンドで実効）<br>
 
+```-p 80:80```コンテナのhost portが80でmap port が80という意味。```nginx```というイメージを使っている。
+
 ```docker contaier ls```<br>
 で現在動いているコンテナの確認
 ```docker ps```<br>
@@ -101,7 +103,9 @@
 で```debian:buster```を土台とした、コンテナが作れる。このコンテナの中で色々操作したいから```/bin/bash```を入れてる。
 最初の```docker run```commandを打った段階で、コンテナの中に入れるので（```-it```commandのおかげ）その中でapt getしたりして、必要なファイルを増やしていくのが、課題を進める大まかな流れになる。
 
-```apt install nginx```でnginxがコンテナの中にinstallできる。
+```apt update && upgrade```をしないと、```apt```コマンドが使える形にならない。```debian"busster```や```/bin/bash```の中に入っているバージョンが最新にならず、以降のインストールがうまくいかない。
+
+```apt install -y nginx```でnginxがコンテナの中にinstallできる。
 この状況で、```http://127.0.0.1:80/```にアクセスすると、"Welcome to nginx!"の表示を見ることができ、実際にnginxが堂さしていることを確認できる。
 
 ```apt-get install wget```を用いて```wget```commandを使えるようにしないといけない。
@@ -111,4 +115,13 @@ wordpressのためには、mySQLが必要、mySQLのためには、phpMyAdmin(my
 まずこのサイトから```http://repo.mysql.com/```debian:busterの上で動くmysqlを取ってくることを考えた。
 
 
-## そもそもnginxとは何か?
+## 使いそうなapt-get options
+```-y```;処理中に現れるプロンプトに対して常にyesを返す。<br>
+```-q --quiet```;実行時の処理状況の表示を省略<br>
+```--no-remobe```;<br>
+```update```;インデックスファイルの更新を行う。<br>
+```upgrade```;サーバに対してインストールされている全てのパッケージの更新確認を行い、新しいバージョンが存在するパッケージに関しては更新を行う。<br>
+```clean``` aptを使用してローカルホストに蓄えられているrpmファイルの削除を行う。rpmファイルとは、多くのLinuxディストリビューションで使用されるバイナリによるソフトウェアのパッケージのこと。(すぐにcleanして問題ないのか？)
+
+
+
