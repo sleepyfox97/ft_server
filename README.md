@@ -99,21 +99,24 @@
 
 
 ## Docker file書き方
-```docker run -it debian:buster /bin/bash```
+```docker run -it -p 80:81 debian:buster /bin/bash```
 で```debian:buster```を土台とした、コンテナが作れる。このコンテナの中で色々操作したいから```/bin/bash```を入れてる。
-最初の```docker run```commandを打った段階で、コンテナの中に入れるので（```-it```commandのおかげ）その中でapt getしたりして、必要なファイルを増やしていくのが、課題を進める大まかな流れになる。
-
-```apt update && upgrade```をしないと、```apt```コマンドが使える形にならない。```debian"busster```や```/bin/bash```の中に入っているバージョンが最新にならず、以降のインストールがうまくいかない。
+最初の```docker run```commandを打った段階で、コンテナの中に入れるので（```-it```commandのおかげ）その中でapt getしたりして、必要なファイルを増やしていくのが、課題を進める大まかな流れになる。<br>
+```-p 80:81```はlocalhost:80にアクセスすると、dockerコンテナの内部でポート81に置いて動いているアプリケーションに接続できるという意味になっている。<br>
+```apt -y update && upgrade```をしないと、```apt```コマンドが使える形にならない。```debian"busster```や```/bin/bash```の中に入っているバージョンが最新にならず、以降のインストールがうまくいかない。
 
 ```apt install -y nginx```でnginxがコンテナの中にinstallできる。
-この状況で、```http://127.0.0.1:80/```にアクセスすると、"Welcome to nginx!"の表示を見ることができ、実際にnginxが堂さしていることを確認できる。
+```service nginx start```をしないと、サービスがスタートしない<br>
+この状況で、```http://127.0.0.1:80/```にアクセスすると、"Welcome to nginx!"の表示を見ることができ、実際にnginxが堂さしていることを確認できる。<br>
 
 ```apt-get install wget```を用いて```wget```commandを使えるようにしないといけない。
-
+```curl```もいない。　<br>
 wordpressのためには、mySQLが必要、mySQLのためには、phpMyAdmin(mySQLの操作がwebブラウザ上から可能となる)が必要、そのためには、Nginxが必要みたいな関係性が存在するみたい。
 
 まずこのサイトから```http://repo.mysql.com/```debian:busterの上で動くmysqlを取ってくることを考えた。
 
+
+ポート番号の指定が大事。
 
 ## 使いそうなapt-get options
 ```-y```;処理中に現れるプロンプトに対して常にyesを返す。<br>
@@ -124,4 +127,46 @@ wordpressのためには、mySQLが必要、mySQLのためには、phpMyAdmin(my
 ```clean``` aptを使用してローカルホストに蓄えられているrpmファイルの削除を行う。rpmファイルとは、多くのLinuxディストリビューションで使用されるバイナリによるソフトウェアのパッケージのこと。(すぐにcleanして問題ないのか？)
 
 
+```set -ex```があった方がいい場合があるみたいだが、なんで必要になっているのかよくわからん。<br>
+コマンドライン直打ちでできることがdocker fileになるとうまくできない。<br>
 
+
+## config fileの場所について
+nginx.confについて：ect/nginx/nginx.confにいる。<br>
+
+
+
+
+
+rush02のレビューポイント
+まず無印のnormを用いる。
+次にmakefileのrelink問題に直面する場合にはNOをつける。
+何も編集していない時に再度コンパイルされたらダメ。
+makefileにはターゲットがある。
+ターゲットの隣には、つかうもの（依存ファイル）を書く。
+makefileの中では```echo```コマンドなどが使える。
+
+エラーハンドリングで試すのは、
+chmod 000のファイルを渡すことなどが考えられる。
+メモリリークにおいてNOをつけることはない。
+
+readの読み込み文字数に関してテストを行う。
+文字数の制限がある場合には、その文字数をどう処理するかを考える。
+read openのエラー処理をしているかをしっかりみる。
+存在しないファイル。権限
+ナンバーズディクトの中のファイルは変えない。
+仮想メモリの概念が存在するので、待つ場合には、
+＃define mallocを作ることで、mallocを壊すことができる。
+
+バイナリファイルを読み込む
+
+google の使ってるmalloc  xmallocがあって、メモリの確保に失敗するとexitしてしまう。プログラムを瞬時に終了させる形になっている。
+
+
+#define SAFE_FREE(ptr) if (ptr != NULL){free(ptr);ptr = NULL}
+
+defineのプリプロセッサ
+gcc -E test.cなんかで、実際に、ないにがソースコードにおいて起きているかをみることができる。defineなど。
+
+
+void ft_leak((destructor))ってのをつかうと、最後に必ず、system("leaks a.out");
