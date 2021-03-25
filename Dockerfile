@@ -1,14 +1,33 @@
-FROM debian:buster
+FROM		debian:buster
 
-MAINTAINER sleepyfox
+MAINTAINER	sleepyfox
 
-RUN set -ex; \
-	apt-get update; \
-	apt-get install -y nginx \
-	curl \
-	wget \
+RUN	apt-get -y update \
+	&& apt-get -y upgrade \
+	&& apt-get --no-install-recommends -y install\
+	nginx \
 	vim \
-	openssl\
+	openssl \
+	php  \
+	php-fpm \
 	mariadb-server \
 	mariadb-client \
+	php-cgi \
 	php-fpm \
+	php-pear \
+	php-mbstring \
+	php-zip \
+	php-net-socket \
+	php-gd \
+	php-gettext \
+	php-mysql \
+	php-bcmath \
+	wget 
+ 
+	
+
+COPY	./srcs/start.sh ./
+COPY	./srcs/server.conf ./etc/nginx/sites-available/server.conf
+COPY	./srcs/wp-config.php ./wp-conf.php
+
+CMD	bash ./start.sh
