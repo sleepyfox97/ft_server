@@ -15,19 +15,14 @@ RUN	apt-get -y update \
 	php-cgi \
 	php-fpm \
 	php-pear \
-	php-mbstring \
 	php-zip \
 	php-net-socket \
 	php-gd \
-	php-gettext \
 	php-mysql \
-	php-bcmath \
-	wget 
- 
-	
+	wget  
 
 COPY	./srcs/start.sh ./
 COPY	./srcs/server.conf ./etc/nginx/sites-available/server.conf
-COPY	./srcs/wp-config.php ./wp-conf.php
+COPY	./srcs/wp-config.php ./wp-config.php
 
 CMD	bash ./start.sh
