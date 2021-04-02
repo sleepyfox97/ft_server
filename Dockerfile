@@ -13,16 +13,22 @@ RUN	apt-get -y update \
 	mariadb-server \
 	mariadb-client \
 	php-cgi \
+	php-common \
 	php-fpm \
 	php-pear \
+	php-mbstring \
 	php-zip \
 	php-net-socket \
 	php-gd \
 	php-mysql \
-	wget  
+	php-xml-util \
+	php-gettext \
+	php-bcmath \
+	wget
 
 COPY	./srcs/start.sh ./
 COPY	./srcs/server.conf ./etc/nginx/sites-available/server.conf
 COPY	./srcs/wp-config.php ./wp-config.php
+COPY	./srcs/config.inc.php ./config.inc.php
 
 CMD	bash ./start.sh
