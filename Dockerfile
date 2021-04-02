@@ -1,6 +1,8 @@
-FROM		debian:buster
+FROM	debian:buster
 
-MAINTAINER	sleepyfox
+LABEL	com.42tokyo.vendor="sleepyfox"
+
+ENV	AUTOINDEX=on
 
 RUN	apt-get -y update \
 	&& apt-get -y upgrade \

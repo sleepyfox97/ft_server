@@ -1,9 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 #autoindex setting
-if ["$AUTOINDEX"="off"]; then
-	sed -i 's/autoindex on/autoindex off' /etc/nginx/sites-available/server.conf
-fi
+sed -i s/%AUTOINDEX%/$AUTOINDEX/g /etc/nginx/sites-available/server.conf
 
 #make symbolic link of server.conf in sites-eneable
 ln -s /etc/nginx/sites-available/server.conf /etc/nginx/sites-enabled/server.conf
